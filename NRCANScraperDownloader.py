@@ -25,9 +25,10 @@ response = requests.get(url_full)
 if response.status_code == 200:  # This checks if the website is working
     soup = bs(response.text, 'html.parser')  # This will create soup from the main URL (essentially takes all the
     # links and turns them into a txt files to be read at a later date
-    for tag in soup.find_all(href=re.compile("/trends")):  # This filters out any links with a /trends in the URL
+    for tag in soup.find_all(href=re.compile(r"/trends/comprehensive.*\.cfm")):  # This filters out any links with a /trends in the URL
         # Defining variables for each link with the /trends found
         HREF = tag['href']
+        print(tag)
         TITLE = tag['title']
         MODTITLE = TITLE.replace("/", "-")  # Replaces / with - because of how file systems work
         FILENAME = MODTITLE + '.zip'  # Append the .zip to the filename otherwise it downloads as a blank file

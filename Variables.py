@@ -1,4 +1,6 @@
 import os
+from operator import truediv
+
 import pandas as pd
 import numpy as np
 import sys
@@ -15,6 +17,15 @@ import argparse
 from bs4 import BeautifulSoup as bs
 import requests
 from sklearn.model_selection import GridSearchCV
+
+extra_input = True
+
+# Defining source folder to swap between just comment or uncomment the respective source folder line do not uncomment
+# both
+# source_folder = os.path.dirname(sys.executable)  # this line is for when using py installer so the path is correct
+# for where the exe file resides
+source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
+# project dir
 
 # setting up a piece of code which will change the input depending on the exe called will be called later at the
 # input section. So what this does after compiling the program into an exe if running the cmd prompt you can call
@@ -35,12 +46,7 @@ parser.add_argument("-t", action="store_true", help="Trigger for final name conv
 
 args = parser.parse_args()
 
-# Defining source folder to swap between just comment or uncomment the respective source folder line do not uncomment
-# both
-source_folder = os.path.dirname(sys.executable)  # this line is for when using py installer so the path is correct
-# for where the exe file resides
-# source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
-# project dir
+
 
 # Create the path for the temp_folder, so it is easier to call
 temp_folder = source_folder + "\\temp\\"
@@ -73,7 +79,7 @@ print("The files are from " + YearUpdated[1:] + " if user input is not enabled, 
 print()
 
 # If the extra argument I is added this code adds the extra input
-if args.I or args.i:
+if args.I or args.i or extra_input:
     print(
         "------------------------------------------------------------------------------------------------------------------------")
     # This file is so the year can be input first then the scraper runs in the larger exe file so the exe can be started

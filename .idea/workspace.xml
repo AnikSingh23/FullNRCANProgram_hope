@@ -5,110 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba2bdf2e-34d3-4744-af3e-5596e817cd5b" name="Changes" comment="Commit without build folder">
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/AGG_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/AGG_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/warn-AGG_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGG_Imputer/xref-AGG_Imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/AGR_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/AGR_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/warn-AGR_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/AGR_Imputer/xref-AGR_Imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/COM_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/COM_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/warn-COM_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/COM_Imputer/xref-COM_Imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/Combined_imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/Combined_imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/warn-Combined_imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Combined_imputer/xref-Combined_imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/Complete_program.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/Complete_program.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/graph-Complete_program.dot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/warn-Complete_program.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Complete_program/xref-Complete_program.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/DelAndMoveFiles.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/DelAndMoveFiles.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/Tree-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/Tree-01.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/Tree-02.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/warn-DelAndMoveFiles.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/DelAndMoveFiles/xref-DelAndMoveFiles.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/IND_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/IND_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/warn-IND_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/IND_Imputer/xref-IND_Imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/Just_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/Just_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/warn-Just_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Just_Imputer/xref-Just_Imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/RES_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/RES_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/warn-RES_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/RES_Imputer/xref-RES_Imputer.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/TRA_Imputer.exe.manifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/TRA_Imputer.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/warn-TRA_Imputer.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/TRA_Imputer/xref-TRA_Imputer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NRCANScraperDownloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/NRCANScraperDownloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Variables.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,12 +47,12 @@
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="5fd463d7-dba3-429c-a629-28cca3225c9a" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/AnikSingh23/FullNRCANProgram1.git",
-    "accountId": "5fd463d7-dba3-429c-a629-28cca3225c9a"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AnikSingh23/FullNRCANProgram_hope.git&quot;,
+    &quot;accountId&quot;: &quot;5fd463d7-dba3-429c-a629-28cca3225c9a&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -170,12 +69,13 @@
   "keyToString": {
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "Python.Complete_Program.executor": "Run",
+    "Python.NRCANScraperDownloader.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master1",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/anik1/Desktop/Scrapy/LEAPUpdater",
-    "settings.editor.selected.configurable": "vcs.Git"
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   },
   "keyToStringList": {
     "ChangesTree.GroupingKeys": [
@@ -275,7 +175,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Variables" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="NRCANScraperDownloader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Full NRCAN Program" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -288,7 +188,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Variables.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NRCANScraperDownloader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="Full NRCAN Program" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -319,13 +241,67 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="Full NRCAN Program" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <module name="Full NRCAN Program" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <module name="Full NRCAN Program" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.NRCANScraperDownloader" />
+      <item itemvalue="Python.Compiler" />
+      <item itemvalue="Python.Complete_Program" />
+      <item itemvalue="Python.DelAndMoveFiles" />
+      <item itemvalue="Python.Just_Imputer" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.Complete_Program" />
+        <item itemvalue="Python.NRCANScraperDownloader" />
         <item itemvalue="Python.Compiler" />
         <item itemvalue="Python.Just_Imputer" />
         <item itemvalue="Python.DelAndMoveFiles" />
-        <item itemvalue="Python.Variables" />
       </list>
     </recent_temporary>
   </component>
