@@ -24,8 +24,10 @@ extra_input = True
 # both
 # source_folder = os.path.dirname(sys.executable)  # this line is for when using py installer so the path is correct
 # for where the exe file resides
-source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
+# source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
 # project dir
+source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\Test Bed' # for a specific folder
+
 
 # setting up a piece of code which will change the input depending on the exe called will be called later at the
 # input section. So what this does after compiling the program into an exe if running the cmd prompt you can call
