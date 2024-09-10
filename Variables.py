@@ -18,7 +18,8 @@ from bs4 import BeautifulSoup as bs
 import requests
 from sklearn.model_selection import GridSearchCV
 
-extra_input = True
+extra_input = False
+year_name = False
 
 # Defining source folder to swap between just comment or uncomment the respective source folder line do not uncomment
 # both
@@ -707,15 +708,15 @@ def conversion(OriginalFileName, NewFileName):
 # easier to edit if need be plus it makes it easier to include the different arguments for the final name change
 def LeapNameChange(CreatedFileName):
     # Checks if the arguments R or T are not enabled, if not then rename to be consistent with leap
-    if not args.R and not args.r and not args.T and not args.t:
+    if not args.R and not args.r and not args.T and not args.t and not year_name:
         temporary = os.path.basename(CreatedFileName)
         # Remove the .xlsx
         temporary = temporary[:-5]
         # Remove the _imp
         temporary = temporary[:-4]
         # Remove the User Input
-        UserCount = len(YearInput) * -1
-        temporary = temporary[:UserCount]
+        # UserCount = len(YearInput) * -1
+        # temporary = temporary[:UserCount]
         # Remove the _e
         temporary = temporary[:-2]
         # Replace tr with ter for territories
@@ -741,6 +742,42 @@ def LeapNameChange(CreatedFileName):
         # Allows the function to return a new value
         return LeapName
 
+    if not args.R and not args.r and not args.T and not args.t and year_name:
+        temporary = os.path.basename(CreatedFileName)
+        # Remove the .xlsx
+        temporary = temporary[:-5]
+        # Remove the _imp
+        temporary = temporary[:-4]
+        # Find and keep the year input (skip the length of YearInput)
+        UserCount = len(YearInput) * -1
+        temp_year = temporary[UserCount:]
+        temporary = temporary[:UserCount]
+        # Now remove the _e (which happens after preserving the year input)
+        temporary = temporary[:-2]
+        # Add the year input back to the string
+        temporary = temporary + temp_year
+        # Replace tr with ter for territories
+        temporary = temporary.replace("_tr", "_ter")
+        # Replace NF with NL for territories
+        temporary = temporary.replace("_nf", "_nl")
+        # Replace AGG with IND for aggregated industries (LEAP uses IND)
+        temporary = temporary.replace("agg", "ind")
+        # Upper case and replace _ with space
+        temporary = temporary.upper().replace("_", " ")
+        # Reverse the order of words in the string
+        s = temporary.split()[::-1]
+        LeapNameList = []
+        for i in s:
+            # Appending reversed words to the list
+            LeapNameList.append(i)
+        # Join the LeapNameList using a space between the words
+        LeapName = " ".join(LeapNameList)
+        # Add back on .xlsx
+        LeapName = LeapName + ".xlsx"
+        # Return the newly created LeapName
+        LeapName = os.path.basename(LeapName)
+        return LeapName
+
     #  Check if the argument R is enabled if it is no changes to the file name need to be made
     if args.R or args.r:
         LeapName = CreatedFileName
@@ -758,3 +795,64 @@ def LeapNameChange(CreatedFileName):
         LeapName = temporary + ".xlsx"
         LeapName = os.path.basename(LeapName)
         return LeapName
+
+
+# def checkvalues(filename, table, oldstyle):
+#     # Examined_File = source_folder + filename
+#
+#     if oldstyle:
+#         rows_skipped = 9
+#     if not oldstyle:
+#         rows_skipped = 10
+#
+#     # Read the file for the years column
+#     dfcheck = pd.read_excel(filename, sheet_name=table, skiprows=rows_skipped, nrows=0)
+#     # Turn column into a list
+#     orig_year_list = dfcheck.columns.tolist()
+#     # Create an alphabetical list the same size as the year list to show corresponding column letters
+#     alphabetical_list = []
+#     # This for loop will populate the alphabetical list with the letters if the number of columns surpass 26 (a-z) then this
+#     # loop will add a preceding letter appropriately for example column 26 would be Z and 27 would be AA, column 52 would be
+#     # AZ and column 53 would be BA
+#     for i in range(len(orig_year_list)):
+#         # Calculate the number of times the preceding character needs to be incremented
+#         preceding_char_increments = i // 26
+#         # Calculate the index of the current character in the alphabet (0-based)
+#         char_index = i % 26
+#         # Create the preceding characters by incrementing the character 'a' the number of times calculated
+#         preceding_chars = ''.join([chr(97 + j) for j in range(preceding_char_increments)])
+#         # Append the preceding characters and the current character to the result list
+#         alphabetical_list.append(preceding_chars + chr(97 + char_index))
+#
+#     # Finds the min and max values of the columns excluding the first two (using 2:) since they are strings and are there
+#     # for formatting the Excel table
+#     print(orig_year_list)
+#     orig_first_year = min(orig_year_list[2:])
+#     orig_last_year = max(orig_year_list[2:])
+#
+#     # Finding the corresponding letter for the orig_first and orig_last year using the alphabetical list created earlier
+#     orig_first_col = alphabetical_list[orig_year_list.index(orig_first_year)].upper()
+#     orig_last_col = alphabetical_list[orig_year_list.index(orig_last_year)].upper()
+#
+#     print(orig_first_year, "   ", orig_first_col)
+#     print(orig_last_year, "   ", orig_last_col)
+#
+#     # Return the first year, last year, and their corresponding Excel columns
+#     return orig_first_year, orig_last_year, orig_first_col, orig_last_col
+
+def checkvalues(filename, table, oldstyle):
+    # Examined_File = source_folder + filename
+
+    rows_skipped = 9 if oldstyle else 10
+
+    # Read the file for the years column
+    dfcheck = pd.read_excel(filename, sheet_name=table, skiprows=rows_skipped, nrows=0)
+
+    # Turn column into a list
+    orig_year_list = dfcheck.columns.tolist()
+
+    # Get the first and last year (assuming the first two columns are not years)
+    orig_first_year = min(orig_year_list[2:])
+    orig_last_year = max(orig_year_list[2:])
+
+    return orig_first_year, orig_last_year
