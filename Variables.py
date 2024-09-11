@@ -754,8 +754,8 @@ def LeapNameChange(CreatedFileName):
         temporary = temporary[:UserCount]
         # Now remove the _e (which happens after preserving the year input)
         temporary = temporary[:-2]
-        # Add the year input back to the string
-        temporary = temporary + temp_year
+        # # Add the year input back to the string
+        # temporary = temporary + temp_year
         # Replace tr with ter for territories
         temporary = temporary.replace("_tr", "_ter")
         # Replace NF with NL for territories

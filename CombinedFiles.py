@@ -82,6 +82,7 @@ if OldYearInput == "*":
 for file in AB_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
+    print(LeapName)
     oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
     newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
