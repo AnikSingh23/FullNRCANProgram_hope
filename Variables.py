@@ -19,7 +19,7 @@ import requests
 from sklearn.model_selection import GridSearchCV
 
 extra_input = False
-year_name = False
+year_name = True
 
 # Defining source folder to swap between just comment or uncomment the respective source folder line do not uncomment
 # both
@@ -27,7 +27,7 @@ year_name = False
 # for where the exe file resides
 # source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
 # project dir
-source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\Test Bed' # for a specific folder
+source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\leap-canada all scenarios_sperry et al._2023-03-16 - Copy' # for a specific folder
 
 
 # setting up a piece of code which will change the input depending on the exe called will be called later at the

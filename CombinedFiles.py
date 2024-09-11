@@ -144,8 +144,8 @@ for file in AB_File:
 for file in ATL_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\ATL\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\ATL\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -206,8 +206,8 @@ for file in ATL_File:
 for file in CAN_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\CAN\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\CAN\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -268,8 +268,8 @@ for file in CAN_File:
 for file in BC_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\BC\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\BC\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -330,8 +330,8 @@ for file in BC_File:
 for file in MB_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\MB\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\MB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -392,8 +392,8 @@ for file in MB_File:
 for file in NB_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\NB\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\NB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -454,8 +454,8 @@ for file in NB_File:
 for file in NL_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\NL\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\NL\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -516,8 +516,8 @@ for file in NL_File:
 for file in NS_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\NS\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\NS\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -578,8 +578,8 @@ for file in NS_File:
 for file in ON_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\ON\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\ON\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -640,8 +640,8 @@ for file in ON_File:
 for file in PE_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\PE\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\PE\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -702,8 +702,8 @@ for file in PE_File:
 for file in QC_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\QC\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\QC\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -764,8 +764,8 @@ for file in QC_File:
 for file in SK_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\SK\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\SK\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files
@@ -826,8 +826,8 @@ for file in SK_File:
 for file in TER_File:
     print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap-compliant version
-    oldFileName = source_folder + "\\AB\\" + LeapName  # Path for the old file
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
+    oldFileName = source_folder + "\\TER\\" + LeapName  # Path for the old file
+    newFileName = source_folder + "\\TER\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # Path for the new file
 
     try:
         # Load the entire workbook for both old and new files

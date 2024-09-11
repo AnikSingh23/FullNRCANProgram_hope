@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba2bdf2e-34d3-4744-af3e-5596e817cd5b" name="Changes" comment="Commit without build folder">
-      <change afterPath="$PROJECT_DIR$/CombinedFiles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Complete_Program.py" beforeDir="false" afterPath="$PROJECT_DIR$/Complete_Program.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DelAndMoveFiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/DelAndMoveFiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CombinedFiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/CombinedFiles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Variables.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,28 +65,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Python.Combine Files.executor": "Run",
-    "Python.CombinedFiles (1).executor": "Run",
-    "Python.Complete_Program.executor": "Run",
-    "Python.NRCANScraperDownloader.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/anik1/Desktop/Scrapy/LEAPUpdater",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Python.Combine Files.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CombinedFiles (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Complete_Program.executor&quot;: &quot;Run&quot;,
+    &quot;Python.NRCANScraperDownloader.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/anik1/Desktop/Scrapy/LEAPUpdater&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "directory"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <option name="SHOW_DETAILS_PANEL" value="false" />
   </component>
@@ -331,7 +329,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725654022972</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Commit without build folder">
+      <option name="closed" value="true" />
+      <created>1726005511592</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1726005511592</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
