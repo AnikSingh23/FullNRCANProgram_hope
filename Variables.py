@@ -27,7 +27,7 @@ year_name = True
 # for where the exe file resides
 # source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
 # project dir
-source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\leap-canada all scenarios_sperry et al._2023-03-16 - Copy' # for a specific folder
+source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\leap-canada all scenarios_sperry et al._2023-03-16 - Copy (2)' # for a specific folder
 
 
 # setting up a piece of code which will change the input depending on the exe called will be called later at the
@@ -707,7 +707,7 @@ def conversion(OriginalFileName, NewFileName):
 # Defining function for the final name change to be more similar to the leap structure, I made this a function, so it is
 # easier to edit if need be plus it makes it easier to include the different arguments for the final name change
 def LeapNameChange(CreatedFileName):
-    # Checks if the arguments R or T are not enabled, if not then rename to be consistent with leap
+    # Checks if the arguments R or T are not enabled, if not then rename to be consistent with leap (note example name is tran_nl_e_imp.xlsx)
     if not args.R and not args.r and not args.T and not args.t and not year_name:
         temporary = os.path.basename(CreatedFileName)
         # Remove the .xlsx
@@ -723,8 +723,14 @@ def LeapNameChange(CreatedFileName):
         temporary = temporary.replace("_tr", "_ter")
         # Replace NF with NL for territories
         temporary = temporary.replace("_nf", "_nl")
-        # Replace AGG with IND same meaning for aggregated industries but LEAP uses IND
+        # Replace AGG with IND for aggregated industries (LEAP uses IND)
         temporary = temporary.replace("agg", "ind")
+        # Replace Tran with Tra for transport (LEAP uses TRA)
+        temporary = temporary.replace("tran", "tra")
+        if "BC_RES" not in temporary:
+            temporary = temporary.replace("BCT", "BC")
+        if "CAN_AGR" in temporary:
+            temporary = temporary.replace("CAN_AGR", "AGR")
         # Upper case and replace _ with space
         temporary = temporary.upper().replace("_", " ")
         # Reverse Order of String
@@ -762,6 +768,12 @@ def LeapNameChange(CreatedFileName):
         temporary = temporary.replace("_nf", "_nl")
         # Replace AGG with IND for aggregated industries (LEAP uses IND)
         temporary = temporary.replace("agg", "ind")
+        # Replace Tran with Tra for transport (LEAP uses TRA)
+        temporary = temporary.replace("tran", "tra")
+        if "BC_RES" not in temporary:
+            temporary = temporary.replace("BCT", "BC")
+        if "CAN_AGR" in temporary:
+            temporary = temporary.replace("CAN_AGR", "AGR")
         # Upper case and replace _ with space
         temporary = temporary.upper().replace("_", " ")
         # Reverse the order of words in the string

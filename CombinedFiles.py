@@ -39,6 +39,9 @@ PE_File = glob.glob(temp_folder + "\*PE*.xlsx")
 
 NS_File = glob.glob(temp_folder + "\*NS*.xlsx")
 
+TER_File = glob.glob(temp_folder + "\*TER*.xlsx")
+
+
 New_File = glob.glob(temp_folder + "\*.xlsx")
 
 

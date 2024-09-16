@@ -3,11 +3,18 @@ import glob
 import shutil
 import os
 import pandas as pd
-from Variables import temp_folder, source_folder, YearInput, LeapNameChange, OldYearInput, Province
+from Variables import temp_folder, source_folder, YearInput, LeapNameChange, OldYearInput, Province, conversion
+
+
+
 
 OldFiles = glob.glob(temp_folder + "\*.xls")
+print(OldFiles)
 for file in OldFiles:
-    os.remove(file)
+    filename = os.path.basename(file)
+    file_name_imp = os.path.splitext(filename)[0] + ".xlsx"
+    print(file)
+    conversion(filename, file_name_imp)
 
 AB_File = glob.glob(temp_folder + "\*ab*.xlsx")
 
@@ -115,8 +122,9 @@ if OldYearInput == "*":
         if OldYearInput != "Undefined" or OldYearInput != 1:
             break
 
-
+print(AB_File)
 for file in AB_File:
+    print(file)
     LeapName = LeapNameChange(file)  # Use a function defined in variables.py to change the file name to a leap compliant version
     newFileName = source_folder + "\\AB\\" + LeapName  # Creates file path for new folder
     oldFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"  # The [:-5] removes the .xlsx
@@ -130,6 +138,7 @@ for file in AB_File:
         shutil.move(newFileName, oldFileName)  # Moves old and renames old files
     except (Exception,):
         pass
+    print(newFileName)
     shutil.move(file, newFileName)  # Moves newly unzipped and renamed file to new path in appropriate
 
 for file in ATL_File:

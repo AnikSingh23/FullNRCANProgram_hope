@@ -5,11 +5,11 @@ print("Starting program which will download, unzip, impute, and move files into 
 print()
 
 import Variables  # Run the Variables script to get the functions, extra input and etc
-# import NRCANScraperDownloader  # Run the downloader to download files to a temporary folder
+import NRCANScraperDownloader  # Run the downloader to download files to a temporary folder
 
 print()
 print("Downloaded Files will proceed to unzip")
-# import Unzip_Files  # Unzip the files in the temporary folder
+import Unzip_Files  # Unzip the files in the temporary folder
 
 print()
 print("Unzipped Files will proceed to convert and impute the files")
