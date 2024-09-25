@@ -273,6 +273,8 @@ def onedfImp(Col1, Row1, Col2, Row2, Filename1, Sheetname1):
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
         df0_imputedtrans = dfC1_imputedtrans
 
+        check(dfC1_imputedtrans, Rows1)
+
         # Append DataFrame to existing Excel file
         with pd.ExcelWriter(TempFilename1, mode='a', if_sheet_exists='overlay') as writer:
             df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1,
@@ -414,6 +416,9 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0009000009], 'N.A.')
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
         # Breaks the combined imputed dataframe into two seperate data frames again
+
+        check(dfC1_imputedtrans, Rows1)
+
         df0_imputedtrans = dfC1_imputedtrans[:Rows1]
         df1_imputedtrans = dfC1_imputedtrans[Rows1:]
 
@@ -550,6 +555,9 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
         # Replace the specified changes back to strings (needed to be numbers so the imputer would run)
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0009000009], 'N.A.')
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
+
+        check(dfC1_imputedtrans, Rows1)
+
         # Breaks the combined imputed dataframe into two seperate data frames again
         df0_imputedtrans = dfC1_imputedtrans[:Rows1]
         df1_imputedtrans = dfC1_imputedtrans[Rows1:Rows1 + Rows2]
@@ -575,6 +583,41 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
             LocalTimeMin, LocalTimeSec = divmod((LocalEndTime - LocalStartTime) / 60, 1.0)
             print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(
                 round(LocalTimeSec * 60)) + " Seconds")
+
+
+# Validation
+def check_imputation_accuracy(df_imputed, total_row_index, tolerance=0.01):
+    """
+    Function to check if the imputed values for each column are close to the total value.
+
+    Parameters:
+    df_imputed: DataFrame containing imputed data (transpose if necessary)
+    total_row_index: The row index where the total value is located (usually 2 rows below the year row)
+    tolerance: The allowed difference between the sum of imputed values and the total value (default is 1%)
+
+    Returns:
+    result: A dictionary with the column and whether the sum of values matches the total
+    """
+    result = {}
+
+    # Get the total value from the total_row_index row
+    total_values = df_imputed.iloc[total_row_index]
+
+    # Sum the imputed values for each column (excluding the total row itself)
+    imputed_sums = df_imputed.iloc[:total_row_index].sum(axis=0)
+
+    # Iterate over each column and compare the imputed sum to the total value
+    for col in df_imputed.columns:
+        total_value = total_values[col]
+        imputed_sum = imputed_sums[col]
+
+        # Check if the sum of imputed values is within the tolerance range of the total value
+        if abs(imputed_sum - total_value) / total_value <= tolerance:
+            result[col] = "Match"
+        else:
+            result[col] = f"Mismatch: Imputed sum = {imputed_sum}, Total = {total_value}"
+
+    return result
 
 
 # Defining conversion method, methods 2 and 4 are the fastest versions. Method 2 cannot have Excel open but copies more

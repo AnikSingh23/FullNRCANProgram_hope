@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba2bdf2e-34d3-4744-af3e-5596e817cd5b" name="Changes" comment="Commit without build folder">
-      <change afterPath="$PROJECT_DIR$/.idea/Full NRCAN Program.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]3/shelved.patch" beforeDir="false" />
+    <list default="true" id="ba2bdf2e-34d3-4744-af3e-5596e817cd5b" name="Changes" comment="Commit for other pc and requirements.txt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CombinedFiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/CombinedFiles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Complete_Program.py" beforeDir="false" afterPath="$PROJECT_DIR$/Complete_Program.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DelAndMoveFiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/DelAndMoveFiles.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Variables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Complete_Program.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/Just_Imputer.exe" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -363,7 +355,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726068991366</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Commit for other pc and requirements.txt">
+      <option name="closed" value="true" />
+      <created>1726449848910</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1726449848910</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -399,6 +399,7 @@
     <MESSAGE value="Comitasd" />
     <MESSAGE value="ComitasdX" />
     <MESSAGE value="Commit without build folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commit without build folder" />
+    <MESSAGE value="Commit for other pc and requirements.txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit for other pc and requirements.txt" />
   </component>
 </project>
