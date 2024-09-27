@@ -81,6 +81,7 @@ if OldYearInput == "*":
         if OldYearInput != "Undefined" or OldYearInput != 1:
             break
 
+
 def add_missing_rows(old_df, new_df):
     # Find all row names in both old and new DataFrames (row names are in the second column, index 1)
     old_row_names = old_df.iloc[:, 1].fillna("").tolist()  # Column B is index 1
@@ -88,6 +89,11 @@ def add_missing_rows(old_df, new_df):
 
     # Iterate through the new row names and check if they exist in the old row names
     for i, new_row_name in enumerate(new_row_names):
+        # Skip rows containing a "!"
+        if "!" in new_row_name:
+            print(f"Skipping row with '!': {new_row_name}")
+            continue
+
         if new_row_name not in old_row_names:
             print(f"Inserting missing row: {new_row_name}")
 
