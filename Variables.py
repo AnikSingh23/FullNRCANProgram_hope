@@ -17,6 +17,7 @@ import argparse
 from bs4 import BeautifulSoup as bs
 import requests
 from sklearn.model_selection import GridSearchCV
+from Check import check
 
 extra_input = False
 year_name = True
@@ -27,8 +28,7 @@ year_name = True
 # for where the exe file resides
 # source_folder = os.path.dirname(__file__)  # this line is for when running in pycharm will load the files into the
 # project dir
-source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\leap-canada all scenarios_sperry et al._2023-03-16 - Copy (2)' # for a specific folder
-
+source_folder = r'C:\Users\anik1\Desktop\Work\LEAP\leap-canada all scenarios_sperry et al._2023-03-16 - Copy (2)'  # for a specific folder
 
 # setting up a piece of code which will change the input depending on the exe called will be called later at the
 # input section. So what this does after compiling the program into an exe if running the cmd prompt you can call
@@ -48,8 +48,6 @@ parser.add_argument("-T", action="store_true", help="Trigger for final name conv
 parser.add_argument("-t", action="store_true", help="Trigger for final name conversion style 2")
 
 args = parser.parse_args()
-
-
 
 # Create the path for the temp_folder, so it is easier to call
 temp_folder = source_folder + "\\temp\\"
@@ -72,8 +70,7 @@ def get_soup(url):  # defines the get_soup function for later use
 # This will check the residential Canada page to see if it has updated (this assumes all the pages update to the same year at the same time which I believe is safe to assume)
 update_check_url = "https://oee.nrcan.gc.ca/corporate/statistics/neud/dpa/menus/trends/comprehensive/trends_res_ca.cfm"
 # Gets the href of the download which should include the year of publication and splits it using the "/" character where the split occurs (This assumes the format remains the same on the NRCAN side with all the files being put into a folder with the year attached directly)
-update_link = get_soup(update_check_url).find(title='Click here to download all of the tables in this menu').get(
-    "href").split('/')
+update_link = get_soup(update_check_url).find(title='Click here to download all of the tables in this menu').get("href").split('/')
 # Grabs the second last item from the split list which should always be the year and sets the variable for later
 YearUpdated = "_" + update_link[-2]
 
@@ -83,18 +80,14 @@ print()
 
 # If the extra argument I is added this code adds the extra input
 if args.I or args.i or extra_input:
-    print(
-        "------------------------------------------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------------------------------------------")
     # This file is so the year can be input first then the scraper runs in the larger exe file so the exe can be started
     # and the user can walk away if necessary
 
     # This section should be clear it is just defining user input to append onto the eventual extracted file
-    print(
-        'Enter text/year to add to the end of the filename generally the year. Will add it in by inserting an _ between')
-    print(
-        'filename and input (has to follow normal windows file name conventions so no /\:*?"<>| symbols) Will overwrite')
-    Year = input(
-        'files of the same name). Type * to use the default setting. If nothing is to be added just press enter: ')
+    print('Enter text/year to add to the end of the filename generally the year. Will add it in by inserting an _ between')
+    print('filename and input (has to follow normal windows file name conventions so no /\:*?"<>| symbols) Will overwrite')
+    Year = input('files of the same name). Type * to use the default setting. If nothing is to be added just press enter: ')
     Year.strip()
     if Year == '':
         YearInput = ""
@@ -105,10 +98,8 @@ if args.I or args.i or extra_input:
 
     print()
 
-    print(
-        'Enter text/year to add to the end of the old filenames (if any exist) generally the year.')
-    print(
-        'This has to follow normal windows file name conventions so no /\:*?"<>| symbols. Type * to use the default setting.')
+    print('Enter text/year to add to the end of the old filenames (if any exist) generally the year.')
+    print('This has to follow normal windows file name conventions so no /\:*?"<>| symbols. Type * to use the default setting.')
     OldYear = input('If nothing is to be added just press enter: ')
     OldYear.strip()
     if OldYear == '':
@@ -129,8 +120,7 @@ if args.I or args.i or extra_input:
     exclusion = [str("Y"), str("y"), str("N"), str("n")]
     # Repeats the user input until it gets the appropriate result
     while overwrite not in exclusion:
-        overwrite = input(
-            "Please enter Y/y to overwrite files or N/n to not overwrite files anything else will repeat the prompt: ")
+        overwrite = input("Please enter Y/y to overwrite files or N/n to not overwrite files anything else will repeat the prompt: ")
     # overwrite = "y"
 
     print()
@@ -143,12 +133,10 @@ if args.I or args.i or extra_input:
     exclusion1 = [str("Y"), str("y"), str("N"), str("n")]
     # Repeats the user input until it gets the appropriate result
     while verbosity not in exclusion1:
-        verbosity = input(
-            "Please enter Y/y to display extra info or N/n to not display extra info anything else will repeat the prompt: ")
+        verbosity = input("Please enter Y/y to display extra info or N/n to not display extra info anything else will repeat the prompt: ")
     # verbosity = "y"
 
-    print(
-        "------------------------------------------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------------------------------------------")
     print()
 else:  # Setting up the default settings for the inputs in the case extra input is not needed
     YearInput = YearUpdated
@@ -164,22 +152,41 @@ end_variable = True
 
 # Mice Imputer
 if verbosity == "n" or verbosity == "N":
-    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random',
-                               min_value=0, max_iter=100, skip_complete=True)
+    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True)
 else:
-    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random',
-                               min_value=0, max_iter=100, skip_complete=True, verbose=2)
+    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True, verbose=2)
 
 # Soft Imputer backup version for testing other types of imputers in case they throw an error (base values)
 if verbosity == "n" or verbosity == "n":
-    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random',
-                                 min_value=0, max_iter=100, skip_complete=True)
+    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True)
 else:
-    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random',
-                                 min_value=0, max_iter=100, skip_complete=True, verbose=2)
+    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True, verbose=2)
 
 # Defining an empty list to count the missing values
 misslist = []
+
+
+def save_imputed_data_plot(dfC1_imputedtrans, Filename1):
+    # Create a plot
+    plt.figure(figsize=(10, 6))
+
+    # Plot each row as a separate line
+    for idx in dfC1_imputedtrans.index:
+        plt.plot(dfC1_imputedtrans.columns, dfC1_imputedtrans.loc[idx, :], label=f'Row {idx}')
+
+    # Add labels and title
+    plt.xlabel('Columns')
+    plt.ylabel('Values')
+    plt.title('Imputed Data: Each Row as a Separate Line')
+
+    # Add legend to identify the lines (optional, can be omitted for large datasets)
+    plt.legend(loc='best', fontsize='small', ncol=2)  # You can customize or remove the legend if needed
+
+    # Save the plot to a file
+    plt.savefig(Filename1, format='png', bbox_inches='tight')
+
+    # Close the plot to free memory
+    plt.close()
 
 
 # Defining the functions to complete the imputation this does a bunch of processes from checking if values missing
@@ -214,8 +221,7 @@ def onedfImp(Col1, Row1, Col2, Row2, Filename1, Sheetname1):
 
     TempFilename1 = temp_folder + Filename1
 
-    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1,
-                        sheet_name=Sheetname1)
+    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1, sheet_name=Sheetname1)
 
     # Timing Function for testing purposes
 
@@ -227,9 +233,7 @@ def onedfImp(Col1, Row1, Col2, Row2, Filename1, Sheetname1):
         misslist.append(df0.isnull().sum().sum())
 
         # Tell the user that there are missing values to be imputed in this data frame
-        print(
-            "There are " + str(df0.isnull().sum().sum()) + " missing values to be imputed in cells " + Col1 + str(
-                Row1) + ":" + Col2 + str(Row2))
+        print("There are " + str(df0.isnull().sum().sum()) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2 + str(Row2))
 
         # This section is to replace sections of long text which should be left as is because I think X is missing data,
         # I would think n.a. means is the electricity type is not used at all, and - is the same just formatted
@@ -273,20 +277,18 @@ def onedfImp(Col1, Row1, Col2, Row2, Filename1, Sheetname1):
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
         df0_imputedtrans = dfC1_imputedtrans
 
-        check(dfC1_imputedtrans, Rows1)
+        save_imputed_data_plot(dfC1_imputedtrans, Filename1)
 
         # Append DataFrame to existing Excel file
         with pd.ExcelWriter(TempFilename1, mode='a', if_sheet_exists='overlay') as writer:
-            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1,
-                                      index=False, header=False)
+            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1, index=False, header=False)
     # setting up the timing function to be linked to the verbosity user input
     if verbosity == "y" or verbosity == "Y":
         # Timing function for testing purposes
         LocalEndTime = time.time()
         # Determine the time and convert to minutes and seconds
         LocalTimeMin, LocalTimeSec = divmod((LocalEndTime - LocalStartTime) / 60, 1.0)
-        print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) +
-              " Seconds")
+        print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) + " Seconds")
 
 
 def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetname1):
@@ -322,10 +324,8 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
     # number from excel so cell C13 starts at skiprows(0,11) this is possibly due to the inclusion of a header
     # tests with header = FALSE might render this part unnecessary. To set the number of rows simply just change
     # the nrows variable to the number of rows being considered.
-    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1,
-                        sheet_name=Sheetname1)
-    df1 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow2), nrows=Rows2, usecols=Cols2,
-                        sheet_name=Sheetname1)
+    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1, sheet_name=Sheetname1)
+    df1 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow2), nrows=Rows2, usecols=Cols2, sheet_name=Sheetname1)
 
     # Timing Function for testing purposes
 
@@ -340,9 +340,7 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
         misslist.append(msum)
 
         # Tell the user that there are missing values to be imputed in this data frame
-        print(
-            "There are " + str(msum) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2 + str(
-                Row2) + " and " + Col3 + str(Row3) + ":" + Col4 + str(Row4))
+        print("There are " + str(msum) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2 + str(Row2) + " and " + Col3 + str(Row3) + ":" + Col4 + str(Row4))
 
         # This section is to replace sections of long text which should be left as is because just "X" is missing data,
         # I would think n.a. means is the electricity type is not used at all, and - is the same just formatted
@@ -417,25 +415,22 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
         # Breaks the combined imputed dataframe into two seperate data frames again
 
-        check(dfC1_imputedtrans, Rows1)
+        save_imputed_data_plot(dfC1_imputedtrans, 'output_plot.png')
 
         df0_imputedtrans = dfC1_imputedtrans[:Rows1]
         df1_imputedtrans = dfC1_imputedtrans[Rows1:]
 
         # Append DataFrame to existing Excel file
         with pd.ExcelWriter(TempFilename1, mode='a', if_sheet_exists='overlay') as writer:
-            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1,
-                                      index=False, header=False)
-            df1_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow2 + 1, startcol=Colnum2 - 1,
-                                      index=False, header=False)
+            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1, index=False, header=False)
+            df1_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow2 + 1, startcol=Colnum2 - 1, index=False, header=False)
     # setting up the timing function to be linked to the verbosity user input
     if verbosity == "y" or verbosity == "Y":
         # Timing function for testing purposes
         LocalEndTime = time.time()
         # Determine the time and convert to minutes and seconds
         LocalTimeMin, LocalTimeSec = divmod((LocalEndTime - LocalStartTime) / 60, 1.0)
-        print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) +
-              " Seconds")
+        print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) + " Seconds")
 
 
 def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6, Row6, Filename1, Sheetname1):
@@ -481,12 +476,9 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
 
     TempFilename1 = temp_folder + Filename1
 
-    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1,
-                        sheet_name=Sheetname1)
-    df1 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow2), nrows=Rows2, usecols=Cols2,
-                        sheet_name=Sheetname1)
-    df2 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow3), nrows=Rows3, usecols=Cols3,
-                        sheet_name=Sheetname1)
+    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1, sheet_name=Sheetname1)
+    df1 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow2), nrows=Rows2, usecols=Cols2, sheet_name=Sheetname1)
+    df2 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow3), nrows=Rows3, usecols=Cols3, sheet_name=Sheetname1)
 
     # Timing Function for testing purposes
 
@@ -501,10 +493,8 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
         misslist.append(msum)
 
         # Tell the user that there are missing values to be imputed in this data frame
-        print(
-            "There are " + str(msum) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2
-            + str(Row2) + " and " + Col3 + str(Row3) + ":" + Col4 + str(Row4) + " and " + Col5 + str(Row5) + ":"
-            + Col6 + str(Row6))
+        print("There are " + str(msum) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2 + str(Row2) + " and " + Col3 + str(Row3) + ":" + Col4 + str(
+            Row4) + " and " + Col5 + str(Row5) + ":" + Col6 + str(Row6))
 
         # This section is to replace sections of long text which should be left as is because I think X is missing data,
         # I would think n.a. means is the electricity type is not used at all, and - is the same just formatted
@@ -556,7 +546,7 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0009000009], 'N.A.')
         dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
 
-        check(dfC1_imputedtrans, Rows1)
+        save_imputed_data_plot(dfC1_imputedtrans, Filename1)
 
         # Breaks the combined imputed dataframe into two seperate data frames again
         df0_imputedtrans = dfC1_imputedtrans[:Rows1]
@@ -565,15 +555,9 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
 
         # Append DataFrame to existing Excel file
         with pd.ExcelWriter(TempFilename1, mode='a', if_sheet_exists='overlay') as writer:
-            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1,
-                                      index=False,
-                                      header=False)
-            df1_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow2 + 1, startcol=Colnum2 - 1,
-                                      index=False,
-                                      header=False)
-            df2_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow3 + 1, startcol=Colnum3 - 1,
-                                      index=False,
-                                      header=False)
+            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1, index=False, header=False)
+            df1_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow2 + 1, startcol=Colnum2 - 1, index=False, header=False)
+            df2_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow3 + 1, startcol=Colnum3 - 1, index=False, header=False)
 
         # setting up the timing function to be linked to the verbosity user input
         if verbosity == "y" or verbosity == "Y":
@@ -581,8 +565,7 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
             LocalEndTime = time.time()
             # Determine the time and convert to minutes and seconds
             LocalTimeMin, LocalTimeSec = divmod((LocalEndTime - LocalStartTime) / 60, 1.0)
-            print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(
-                round(LocalTimeSec * 60)) + " Seconds")
+            print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) + " Seconds")
 
 
 # Validation
@@ -632,9 +615,7 @@ def conversion(OriginalFileName, NewFileName):
     if method == 1:
         # Longer conversion process which keeps the formatting (requires xls2xlsx and related dependencies)
         # (Roughly 50 min overall for every file)
-        print("Conversion Method Temporarily Disabled")
-        # ConFile = xlsx(OriginalFileName)
-        # ConFile.to_xlsx(NewFileName)
+        print("Conversion Method Temporarily Disabled")  # ConFile = xlsx(OriginalFileName)  # ConFile.to_xlsx(NewFileName)
 
     if method == 2:
         # Shorter Conversion process which keep formatting (requires pywin32 and a system with Excel installed)
@@ -723,21 +704,14 @@ def conversion(OriginalFileName, NewFileName):
                     xf_index = sheet.cell_xf_index(row, col)
                     xf = wb.xf_list[xf_index]
                     font = wb.font_list[xf.font_index]
-                    new_font = openpyxl.styles.Font(name=font.name,
-                                                    size=10,
-                                                    bold=font.bold,
-                                                    italic=font.italic,
-                                                    strike=font.struck_out,
-                                                    )
+                    new_font = openpyxl.styles.Font(name=font.name, size=10, bold=font.bold, italic=font.italic, strike=font.struck_out, )
                     new_cell.font = new_font
                     # new_cell.alignment = xf.alignment
                     # new_cell.border = xf.border
                     # new_cell.fill = xf.background
                     new_cell.number_format = wb.format_map[xf.format_key].format_str
 
-            # Set the column widths in the new sheet to match the original sheet
-            # for col_idx, width in enumerate(sheet.col_widths):
-            #     new_sheet.column_dimensions[openpyxl.utils.get_column_letter(col_idx + 1)].width = width
+            # Set the column widths in the new sheet to match the original sheet  # for col_idx, width in enumerate(sheet.col_widths):  #     new_sheet.column_dimensions[openpyxl.utils.get_column_letter(col_idx + 1)].width = width
 
         del new_wb["Sheet"]
 
@@ -770,6 +744,8 @@ def LeapNameChange(CreatedFileName):
         temporary = temporary.replace("agg", "ind")
         # Replace Tran with Tra for transport (LEAP uses TRA)
         temporary = temporary.replace("tran", "tra")
+        # Replace Tran with ca with can (LEAP uses Can)
+        temporary = temporary.replace("ca", "can")
         if "BC_RES" not in temporary:
             temporary = temporary.replace("BCT", "BC")
         if "CAN_AGR" in temporary:
@@ -796,7 +772,7 @@ def LeapNameChange(CreatedFileName):
         # Remove the .xlsx
         temporary = temporary[:-5]
         # Remove the _imp
-        temporary = temporary[:-4]
+        # temporary = temporary[:-4]
         # Find and keep the year input (skip the length of YearInput)
         UserCount = len(YearInput) * -1
         temp_year = temporary[UserCount:]
@@ -813,6 +789,8 @@ def LeapNameChange(CreatedFileName):
         temporary = temporary.replace("agg", "ind")
         # Replace Tran with Tra for transport (LEAP uses TRA)
         temporary = temporary.replace("tran", "tra")
+        # Replace Tran with ca with can (LEAP uses Can)
+        temporary = temporary.replace("ca", "can")
         if "BC_RES" not in temporary:
             temporary = temporary.replace("BCT", "BC")
         if "CAN_AGR" in temporary:
