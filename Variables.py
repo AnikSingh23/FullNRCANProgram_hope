@@ -772,7 +772,7 @@ def LeapNameChange(CreatedFileName):
         # Remove the .xlsx
         temporary = temporary[:-5]
         # Remove the _imp
-        # temporary = temporary[:-4]
+        temporary = temporary[:-4]
         # Find and keep the year input (skip the length of YearInput)
         UserCount = len(YearInput) * -1
         temp_year = temporary[UserCount:]
