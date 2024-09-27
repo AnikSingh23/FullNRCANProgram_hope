@@ -44,29 +44,6 @@ TER_File = glob.glob(temp_folder + "\*TER*.xlsx")
 
 New_File = glob.glob(temp_folder + "\*.xlsx")
 
-# Dynamic function to add missing rows and columns
-def dynamically_add_missing_rows_columns(old_df, new_df):
-    # Find how many rows and columns need to be added in the old_df to match new_df
-    old_row_count, old_col_count = old_df.shape
-    new_row_count, new_col_count = new_df.shape
-
-    # Dynamically add missing rows if old_df has fewer rows than new_df
-    if old_row_count < new_row_count:
-        # Add empty rows to old_df to match new_df row count
-        rows_to_add = new_row_count - old_row_count
-        new_rows = pd.DataFrame([[''] * old_col_count] * rows_to_add)  # Create empty rows
-        old_df = pd.concat([old_df, new_rows], ignore_index=True)
-        print(f"Added {rows_to_add} rows to match new file.")
-
-    # Dynamically add missing columns if old_df has fewer columns than new_df
-    if old_col_count < new_col_count:
-        # Add empty columns to old_df to match new_df column count
-        cols_to_add = new_col_count - old_col_count
-        for i in range(cols_to_add):
-            old_df[f'new_col_{i+1}'] = ''  # Dynamically name the new columns
-        print(f"Added {cols_to_add} columns to match new file.")
-
-    return old_df
 
 # Remove the temp folder from the province list
 Province.remove("Temp")
@@ -104,692 +81,110 @@ if OldYearInput == "*":
         if OldYearInput != "Undefined" or OldYearInput != 1:
             break
 
-for file in AB_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    print(LeapName)
-    oldFileName = source_folder + "\\AB\\" + LeapName
-    newFileName = source_folder + "\\AB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        # Load the entire workbook for both old and new files
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        # Iterate through the sheet names in the old workbook
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    # Load the specific sheet (table) from both the old and new files
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    # Dynamically add missing rows/columns
-                    old_df = dynamically_add_missing_rows_columns(old_df, new_df)
-
-                    # Extract the year row (assumed to be in row 9 in the old file and row 10 in the new file)
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    # Ensure both year rows have the expected structure
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    # Determine the starting column for year 2000 in the old file
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    # Add extra columns if the old file doesn't have enough columns (repeated in case dynamic adjustment missed something)
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    # Debug info
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    # Update the year row (row 9) in the old file to include missing years from 2000-2021
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    # Copy data from new file to old file
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    # Save the modified sheet back to the old workbook, preserving other sheets
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-
-# Processing ATL_File
-for file in ATL_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\ATL\\" + LeapName
-    newFileName = source_folder + "\\ATL\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing CAN_File
-for file in CAN_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\CAN\\" + LeapName
-    newFileName = source_folder + "\\CAN\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing BC_File
-for file in BC_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\BC\\" + LeapName
-    newFileName = source_folder + "\\BC\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing MB_File
-for file in MB_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\MB\\" + LeapName
-    newFileName = source_folder + "\\MB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing NB_File
-for file in NB_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\NB\\" + LeapName
-    newFileName = source_folder + "\\NB\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-# Processing NL_File
-for file in NL_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\NL\\" + LeapName
-    newFileName = source_folder + "\\NL\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing NS_File
-for file in NS_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\NS\\" + LeapName
-    newFileName = source_folder + "\\NS\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing ON_File
-for file in ON_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\ON\\" + LeapName
-    newFileName = source_folder + "\\ON\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing PE_File
-for file in PE_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\PE\\" + LeapName
-    newFileName = source_folder + "\\PE\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing QC_File
-for file in QC_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\QC\\" + LeapName
-    newFileName = source_folder + "\\QC\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing SK_File
-for file in SK_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\SK\\" + LeapName
-    newFileName = source_folder + "\\SK\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
-
-# Processing TER_File
-for file in TER_File:
-    print(file)
-    LeapName = LeapNameChange(file)
-    oldFileName = source_folder + "\\TER\\" + LeapName
-    newFileName = source_folder + "\\TER\\" + LeapName[:-5] + " " + str(OldYearInput) + ".xlsx"
-
-    try:
-        old_workbook = pd.ExcelFile(oldFileName)
-        new_workbook = pd.ExcelFile(file)
-
-        for sheet_name in old_workbook.sheet_names:
-            try:
-                if pattern.match(sheet_name):
-                    print(f"Processing {sheet_name}...")
-
-                    old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
-                    new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
-
-                    old_year_row = old_df.iloc[9, 2:]
-                    new_year_row = new_df.iloc[10, 2:]
-
-                    old_years = old_year_row.dropna().astype(int).tolist()
-                    new_years = new_year_row.dropna().astype(int).tolist()
-
-                    old_start_col = old_years.index(2000) + 2
-                    num_years_to_copy = len(new_years)
-
-                    old_required_columns = old_start_col + num_years_to_copy
-                    current_old_columns = len(old_df.columns)
-
-                    if current_old_columns < old_required_columns:
-                        for _ in range(old_required_columns - current_old_columns):
-                            old_df[current_old_columns] = ''
-                            current_old_columns += 1
-
-                    print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
-
-                    old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
-
-                    new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
-                    old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
-
-                    with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
-                        old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
-
-            except Exception as e:
-                print(f"An error occurred while processing sheet {sheet_name}: {e}")
-
-    except Exception as e:
-        print(f"An error occurred with the file {file}: {e}")
+def add_missing_rows(old_df, new_df):
+    # Find all row names in both old and new DataFrames (row names are in the second column, index 1)
+    old_row_names = old_df.iloc[:, 1].fillna("").tolist()  # Column B is index 1
+    new_row_names = new_df.iloc[:, 1].fillna("").tolist()
+
+    # Iterate through the new row names and check if they exist in the old row names
+    for i, new_row_name in enumerate(new_row_names):
+        if new_row_name not in old_row_names:
+            print(f"Inserting missing row: {new_row_name}")
+
+            # Get the new row data and fill missing columns with zeros if needed
+            new_row_data = new_df.iloc[i].tolist()
+
+            # Ensure the new row has the same number of columns as the old DataFrame
+            if len(new_row_data) < len(old_df.columns):
+                new_row_data.extend([0] * (len(old_df.columns) - len(new_row_data)))  # Pad with zeros
+
+            # Create a new DataFrame for the row with the correct number of columns
+            new_row = pd.DataFrame([new_row_data], columns=old_df.columns)
+
+            # Find where to insert the row in old_df (insert at the same index `i` or at the end)
+            if i < len(old_df):
+                old_df = pd.concat([old_df.iloc[:i], new_row, old_df.iloc[i:]], ignore_index=True)
+            else:
+                old_df = pd.concat([old_df, new_row], ignore_index=True)
+
+            print(f"Row {new_row_name} added to old_df.")
+
+    return old_df
+
+# Processing files by province
+def process_files_by_province(province_files, province_code):
+    for file in province_files:
+        print(file)
+        LeapName = LeapNameChange(file)
+        oldFileName = source_folder + f"\\{province_code}\\" + LeapName
+        newFileName = source_folder + f"\\{province_code}\\" + LeapName[:-5] + f" {OldYearInput}.xlsx"
+
+        try:
+            # Load the entire workbook for both old and new files
+            old_workbook = pd.ExcelFile(oldFileName)
+            new_workbook = pd.ExcelFile(file)
+
+            for sheet_name in old_workbook.sheet_names:
+                try:
+                    if pattern.match(sheet_name):
+                        print(f"Processing {sheet_name}...")
+
+                        old_df = pd.read_excel(oldFileName, sheet_name=sheet_name, header=None)
+                        new_df = pd.read_excel(file, sheet_name=sheet_name, header=None)
+
+                        # Add missing rows to the old file
+                        old_df = add_missing_rows(old_df, new_df)
+
+                        # Now the rows should match, proceed with copying the year data as needed
+                        old_year_row = old_df.iloc[9, 2:]  # Year row assumed at row 10 (index 9)
+                        new_year_row = new_df.iloc[10, 2:]
+
+                        old_years = old_year_row.dropna().astype(int).tolist()
+                        new_years = new_year_row.dropna().astype(int).tolist()
+
+                        old_start_col = old_years.index(2000) + 2
+                        num_years_to_copy = len(new_years)
+
+                        old_required_columns = old_start_col + num_years_to_copy
+                        current_old_columns = len(old_df.columns)
+
+                        # Add extra columns if the old file doesn't have enough columns
+                        if current_old_columns < old_required_columns:
+                            for _ in range(old_required_columns - current_old_columns):
+                                old_df[current_old_columns] = ''
+                                current_old_columns += 1
+
+                        print(f"Old Start Col: {old_start_col}, Columns to Copy: {num_years_to_copy}, Required Columns: {old_required_columns}, Current Columns: {current_old_columns}")
+
+                        # Update the year row (row 9) in the old file to include missing years from 2000-2021
+                        old_df.iloc[9, old_start_col:old_start_col + num_years_to_copy] = new_year_row.values[:num_years_to_copy]
+
+                        # Copy data from new file (years 2000-2021) to old file
+                        new_data = new_df.iloc[11:, 2:2 + num_years_to_copy].values
+                        old_df.iloc[10:10 + new_data.shape[0], old_start_col:old_start_col + num_years_to_copy] = new_data
+
+                        # Save the modified sheet back to the old workbook, preserving other sheets
+                        with pd.ExcelWriter(oldFileName, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+                            old_df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
+
+                except Exception as e:
+                    print(f"An error occurred while processing sheet {sheet_name}: {e}")
+
+        except Exception as e:
+            print(f"An error occurred with the file {file}: {e}")
+
+# Now process each province's files using the modified code
+process_files_by_province(AB_File, "AB")
+process_files_by_province(AB_File, "AB")
+process_files_by_province(ATL_File, "ATL")
+process_files_by_province(CAN_File, "CAN")
+process_files_by_province(BC_File, "BC")
+process_files_by_province(MB_File, "MB")
+process_files_by_province(ON_File, "ON")
+process_files_by_province(QC_File, "QC")
+process_files_by_province(SK_File, "SK")
+process_files_by_province(NB_File, "NB")
+process_files_by_province(NL_File, "NL")
+process_files_by_province(PE_File, "PE")
+process_files_by_province(NS_File, "NS")
+process_files_by_province(TER_File, "TER")
