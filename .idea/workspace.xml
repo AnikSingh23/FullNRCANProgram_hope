@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ba2bdf2e-34d3-4744-af3e-5596e817cd5b" name="Changes" comment="Commit for other pc and requirements.txt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CombinedFiles.py" beforeDir="false" afterPath="$PROJECT_DIR$/CombinedFiles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Variables.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -396,7 +398,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727463842407</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Commit for other pc and requirements.txt">
+      <option name="closed" value="true" />
+      <created>1727464368275</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1727464368275</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

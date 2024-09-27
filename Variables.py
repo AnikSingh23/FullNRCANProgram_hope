@@ -17,6 +17,7 @@ import argparse
 from bs4 import BeautifulSoup as bs
 import requests
 from sklearn.model_selection import GridSearchCV
+import matplotlib
 from Check import check
 
 extra_input = False
