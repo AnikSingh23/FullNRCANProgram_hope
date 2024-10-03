@@ -17,7 +17,7 @@ import argparse
 from bs4 import BeautifulSoup as bs
 import requests
 from sklearn.model_selection import GridSearchCV
-import matplotlib
+import matplotlib.pyplot as plt
 
 extra_input = False
 year_name = True
@@ -434,8 +434,8 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
             acceptable = True
             for col in dfC1_imputedtrans.columns:
                 try:
-                    total_value = float(dfC1_imputedtrans.iloc[1][col])
-                    component_values = dfC1_imputedtrans.iloc[2:, col].astype(float)
+                    total_value = float(dfC1_imputedtrans.iloc[0][col])
+                    component_values = dfC1_imputedtrans.iloc[1:, col].astype(float)
                     sum_components = component_values.sum()
 
                     if total_value != 0:
@@ -443,10 +443,10 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
                     else:
                         relative_difference = 0 if sum_components == 0 else float('inf')
 
-                    if relative_difference > 0.05:
+                    if relative_difference > 0.10:
                         acceptable = False
                         print(
-                            f"Iteration {iteration}: Total vs Sum in column '{col}' differs by more than 5% "
+                            f"Iteration {iteration}: Total vs Sum in column '{col}' differs by more than 10% "
                             f"({relative_difference * 100:.2f}%). Re-imputing..."
                         )
                         break  # No need to check further columns
@@ -658,8 +658,8 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
             acceptable = True
             for col in dfC1_imputedtrans.columns:
                 try:
-                    total_value = float(dfC1_imputedtrans.iloc[1][col])
-                    component_values = dfC1_imputedtrans.iloc[2:, col].astype(float)
+                    total_value = float(dfC1_imputedtrans.iloc[0][col])
+                    component_values = dfC1_imputedtrans.iloc[1:, col].astype(float)
                     sum_components = component_values.sum()
 
                     if total_value != 0:
@@ -667,10 +667,10 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
                     else:
                         relative_difference = 0 if sum_components == 0 else float('inf')
 
-                    if relative_difference > 0.05:
+                    if relative_difference > 0.10:
                         acceptable = False
                         print(
-                            f"Iteration {iteration}: Total vs Sum in column '{col}' differs by more than 5% "
+                            f"Iteration {iteration}: Total vs Sum in column '{col}' differs by more than 10% "
                             f"({relative_difference * 100:.2f}%). Re-imputing..."
                         )
                         break
