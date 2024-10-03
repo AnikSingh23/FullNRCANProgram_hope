@@ -150,18 +150,35 @@ end_variable = True
 # Iterative imputer (base without changing estimator)
 # imputer = Fimput(max_iter=100, keep_empty_features=True)
 
-# Mice Imputer
-if verbosity == "n" or verbosity == "N":
-    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True)
-else:
-    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True, verbose=2)
+# Set verbosity level
+verbose_level = 2 if verbosity.lower() == 'y' else 0
 
-# Soft Imputer backup version for testing other types of imputers in case they throw an error (base values)
-if verbosity == "n" or verbosity == "n":
-    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True)
-else:
-    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True, verbose=2)
+# Define the estimator with random_state=None to ensure randomness
+estimator = xg.XGBRegressor(random_state=None)
 
+# Initialize the IterativeImputer with dynamic verbosity and randomness
+imputer = IterativeImputer(
+    estimator=estimator,
+    initial_strategy='median',
+    imputation_order='random',
+    min_value=0,
+    max_iter=1000,
+    skip_complete=True,
+    verbose=verbose_level,
+    random_state=None
+)
+
+# Backup imputer in case the main imputer throws an error
+baImputer = IterativeImputer(
+    estimator=estimator,
+    initial_strategy='median',
+    imputation_order='random',
+    min_value=0,
+    max_iter=1000,
+    skip_complete=True,
+    verbose=verbose_level,
+    random_state=None
+)
 # Defining an empty list to count the missing values
 misslist = []
 
@@ -434,6 +451,7 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
             acceptable = True
             for col in dfC1_imputedtrans.columns:
                 try:
+                    print(dfC1_imputedtrans)
                     total_value = float(dfC1_imputedtrans.iloc[0][col])
                     component_values = dfC1_imputedtrans.iloc[1:, col].astype(float)
                     sum_components = component_values.sum()
