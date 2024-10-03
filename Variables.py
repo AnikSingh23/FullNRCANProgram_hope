@@ -734,39 +734,7 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
         )
 
 
-# Validation
-def check_imputation_accuracy(df_imputed, total_row_index, tolerance=0.01):
-    """
-    Function to check if the imputed values for each column are close to the total value.
 
-    Parameters:
-    df_imputed: DataFrame containing imputed data (transpose if necessary)
-    total_row_index: The row index where the total value is located (usually 2 rows below the year row)
-    tolerance: The allowed difference between the sum of imputed values and the total value (default is 1%)
-
-    Returns:
-    result: A dictionary with the column and whether the sum of values matches the total
-    """
-    result = {}
-
-    # Get the total value from the total_row_index row
-    total_values = df_imputed.iloc[total_row_index]
-
-    # Sum the imputed values for each column (excluding the total row itself)
-    imputed_sums = df_imputed.iloc[:total_row_index].sum(axis=0)
-
-    # Iterate over each column and compare the imputed sum to the total value
-    for col in df_imputed.columns:
-        total_value = total_values[col]
-        imputed_sum = imputed_sums[col]
-
-        # Check if the sum of imputed values is within the tolerance range of the total value
-        if abs(imputed_sum - total_value) / total_value <= tolerance:
-            result[col] = "Match"
-        else:
-            result[col] = f"Mismatch: Imputed sum = {imputed_sum}, Total = {total_value}"
-
-    return result
 
 
 # Defining conversion method, methods 2 and 4 are the fastest versions. Method 2 cannot have Excel open but copies more
