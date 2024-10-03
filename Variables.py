@@ -152,15 +152,15 @@ end_variable = True
 
 # Mice Imputer
 if verbosity == "n" or verbosity == "N":
-    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True)
+    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True)
 else:
-    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True, verbose=2)
+    imputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True, verbose=2)
 
 # Soft Imputer backup version for testing other types of imputers in case they throw an error (base values)
 if verbosity == "n" or verbosity == "n":
-    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True)
+    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True)
 else:
-    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=100, skip_complete=True, verbose=2)
+    baImputer = IterativeImputer(estimator=xg.XGBRegressor(), initial_strategy='median', imputation_order='random', min_value=0, max_iter=1000, skip_complete=True, verbose=2)
 
 # Defining an empty list to count the missing values
 misslist = []
