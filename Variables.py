@@ -18,7 +18,6 @@ from bs4 import BeautifulSoup as bs
 import requests
 from sklearn.model_selection import GridSearchCV
 import matplotlib
-from Check import check
 
 extra_input = False
 year_name = True
@@ -171,17 +170,24 @@ def save_imputed_data_plot(dfC1_imputedtrans, Filename1):
     # Create a plot
     plt.figure(figsize=(10, 6))
 
+    # Convert data to numeric where possible, coerce errors to NaN
+    df_numeric = dfC1_imputedtrans.apply(pd.to_numeric, errors='coerce')
+
     # Plot each row as a separate line
-    for idx in dfC1_imputedtrans.index:
-        plt.plot(dfC1_imputedtrans.columns, dfC1_imputedtrans.loc[idx, :], label=f'Row {idx}')
+    for idx in df_numeric.index:
+        plt.plot(
+            df_numeric.columns,
+            df_numeric.loc[idx, :],
+            label=f'Row {idx}'
+        )
 
     # Add labels and title
     plt.xlabel('Columns')
     plt.ylabel('Values')
     plt.title('Imputed Data: Each Row as a Separate Line')
 
-    # Add legend to identify the lines (optional, can be omitted for large datasets)
-    plt.legend(loc='best', fontsize='small', ncol=2)  # You can customize or remove the legend if needed
+    # Add legend to identify the lines
+    plt.legend(loc='best', fontsize='small', ncol=2)
 
     # Save the plot to a file
     plt.savefig(Filename1, format='png', bbox_inches='tight')
@@ -303,33 +309,37 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
     # Defining first set of start rows
     SRow1 = Row1 - 2
     SRow2 = Row3 - 2
-    # Defining the start column as a number by converting the Col1 and Col3 variables to numbers note the .upper()
-    # ensures the value is a capital letter to ensure - 64 gives the correct value if not it will throw an error
-    # as lower case letters require a - 96 to give correct value
-    if len(Col1) == 1:
-        Colnum1 = ord(Col1.upper()) - 64
-    else:
-        Colnum1 = ((ord(Col1[:1].upper()) - 64) * 26) + (ord(Col1[1:].upper()) - 64)
 
-    if len(Col2) == 1:
-        Colnum2 = ord(Col3.upper()) - 64
-    else:
-        Colnum2 = ((ord(Col3[:1].upper()) - 64) * 26) + (ord(Col3[1:].upper()) - 64)
+    # Defining the start column as a number by converting column letters to numbers
+    def col_to_num(col):
+        num = 0
+        for c in col.upper():
+            num = num * 26 + (ord(c) - ord('A') + 1)
+        return num
+
+    Colnum1 = col_to_num(Col1)
+    Colnum2 = col_to_num(Col3)
 
     TempFilename1 = temp_folder + Filename1
 
-    # IF data changes this section in each for loop must also change for example the current area of interest is
-    # row C13:V13 which is 1 row and cols C:V for totals and C15:V24 which is 10 rows and cols C:V for individual
-    # energy use. To change the cols (which equates to years) change the value of usecols = C:V to the column
-    # needed in Excel. To change the rows the starting point is indicated by skiprows(0, x) x is 2 minus the row
-    # number from excel so cell C13 starts at skiprows(0,11) this is possibly due to the inclusion of a header
-    # tests with header = FALSE might render this part unnecessary. To set the number of rows simply just change
-    # the nrows variable to the number of rows being considered.
-    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1, sheet_name=Sheetname1)
-    df1 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow2), nrows=Rows2, usecols=Cols2, sheet_name=Sheetname1)
+    df0 = pd.read_excel(
+        TempFilename1,
+        na_values=['x', 'X'],
+        skiprows=range(0, SRow1),
+        nrows=Rows1,
+        usecols=Cols1,
+        sheet_name=Sheetname1
+    )
+    df1 = pd.read_excel(
+        TempFilename1,
+        na_values=['x', 'X'],
+        skiprows=range(0, SRow2),
+        nrows=Rows2,
+        usecols=Cols2,
+        sheet_name=Sheetname1
+    )
 
     # Timing Function for testing purposes
-
     LocalStartTime = time.time()
 
     # If function to save time by skipping data frames without a null value
@@ -341,97 +351,155 @@ def twodfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Filename1, Sheetnam
         misslist.append(msum)
 
         # Tell the user that there are missing values to be imputed in this data frame
-        print("There are " + str(msum) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2 + str(Row2) + " and " + Col3 + str(Row3) + ":" + Col4 + str(Row4))
+        print(
+            "There are "
+            + str(msum)
+            + " missing values to be imputed in cells "
+            + Col1
+            + str(Row1)
+            + ":"
+            + Col2
+            + str(Row2)
+            + " and "
+            + Col3
+            + str(Row3)
+            + ":"
+            + Col4
+            + str(Row4)
+        )
 
-        # This section is to replace sections of long text which should be left as is because just "X" is missing data,
-        # I would think n.a. means is the electricity type is not used at all, and - is the same just formatted
-        # differently I don't know why
-        df0 = df0.replace(['n.a.'], '0.0009000009')
-        df1 = df1.replace(['n.a.'], '0.0009000009')
+        # Replace 'n.a.', 'N.A.', and '–' with temporary numeric values for imputation
+        df0 = df0.replace(['n.a.', 'N.A.', '–'], [0.0009000009, 0.0009000009, 0.0008000008])
+        df1 = df1.replace(['n.a.', 'N.A.', '–'], [0.0009000009, 0.0009000009, 0.0008000008])
 
-        df0 = df0.replace(['–'], '0.0008000008')
-        df1 = df1.replace(['–'], '0.0008000008')
-
-        # Combine data frames generally the 1 row data frame is the total for the larger data frame so should be
-        # imputed together to get better results when using iterative imputers
+        # Combine data frames
         dfcombine1 = pd.concat([df0, df1], ignore_index=True)
-
-        # Ensures the data types are numerical not needed and for some reason can throw an error if included I am not sure why
-        # dfcombine2 = dfcombine1.select_dtypes(['int', 'float'])
 
         # Transpose x and y-axis because of the ways imputers read data
         dfTransC1 = dfcombine1.transpose()
 
-        # Sets up names for each column so when a column gets dropped we know which one is dropped and where to place it
-        # the names follow the structure of col1, col2, col3 ... etc
+        # Set up column names
         column_names = ["col" + str(i) for i in range(dfTransC1.shape[1])]
         dfTransC1.columns = column_names
 
-        # Performs the imputation with the follow code if there is a need for a backup imputer
-        try:
-            imputedC1 = imputer.fit_transform(dfTransC1)
-        except (Exception,):
-            imputedC1 = baImputer.fit_transform(dfTransC1)
+        # Initialize iteration variables
+        max_iterations = 5
+        iteration = 0
+        acceptable = False
 
-        # Turn the imputed data back into a data frame along with the named columns since it's named after the columns
-        # after they get dropped the missing columns can be found easier
+        while not acceptable and iteration < max_iterations:
+            iteration += 1
 
-        dfC1_imputed = pd.DataFrame(imputedC1, columns=dfTransC1.dropna(axis=1, how='all').columns)
-
-        # Clear the missing_cols list to ensure previous runs don't affect the current run
-        missing_cols = []
-        missing_cols.clear()
-
-        # Find missing columns by the original set of column names and names after the drop occurs
-        missing_cols = list(set(dfTransC1.columns) - set(dfC1_imputed.columns))
-        # Sort the missing cols, so it goes in reverse order which should prevent errors (since if a data frame is missing cols 1 and 2 without this command it will try to create col1 first by calling on the position of col2 which does not exist and will throw an error (which is if is a problem another problem may occur is the last col is missing since there is no next col to find (might have to implement a try function to find the location of the previous value and add one)
-        missing_cols.sort(reverse=True)
-
-        # for each missing column reinsert a row of 0s by stripping the col off of col1, col2, col3 etc. of the missing
-        # columns adding one to the number (since it inserts before the column position) to get the value of the next
-        # column and inserts a new column of appropriate name in an appropriate place
-        for colu in missing_cols:
-            colu0 = colu[3:]
-
-            # Column one ahead
-            colu1 = int(colu0) + 1
-            colu2 = "col" + str(colu1)
-
-            # Column one behind
-            colu3 = int(colu0) - 1
-            colu4 = "col" + str(colu3)
-
-            # This try is in place incase the last column is missing it will try it normally if it throws an error it will check if there is a previous column number and add one to its location position.
+            # Perform imputation
             try:
-                col_pos = dfC1_imputed.columns.get_loc(colu2)
-            except KeyError:
-                col_pos = dfC1_imputed.columns.get_loc(colu4) + 1
+                imputedC1 = imputer.fit_transform(dfTransC1)
+            except Exception:
+                imputedC1 = baImputer.fit_transform(dfTransC1)
 
-            dfC1_imputed.insert(col_pos, colu, 0)
+            # Turn the imputed data back into a data frame
+            dfC1_imputed = pd.DataFrame(
+                imputedC1,
+                columns=dfTransC1.dropna(axis=1, how='all').columns
+            )
 
-        # Transpose the imputed data BACK to the original orientation
-        dfC1_imputedtrans = dfC1_imputed.transpose()
-        # Replace the specified changes back to strings (needed to be numbers so the imputer would run)
-        dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0009000009], 'N.A.')
-        dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
-        # Breaks the combined imputed dataframe into two seperate data frames again
+            # Handle missing columns
+            missing_cols = list(set(dfTransC1.columns) - set(dfC1_imputed.columns))
+            missing_cols.sort(reverse=True)
+            for colu in missing_cols:
+                colu0 = int(colu[3:])
 
-        save_imputed_data_plot(dfC1_imputedtrans, 'output_plot.png')
+                # Column one ahead
+                colu1 = colu0 + 1
+                colu2 = "col" + str(colu1)
 
-        df0_imputedtrans = dfC1_imputedtrans[:Rows1]
-        df1_imputedtrans = dfC1_imputedtrans[Rows1:]
+                # Column one behind
+                colu3 = colu0 - 1
+                colu4 = "col" + str(colu3)
+
+                try:
+                    col_pos = dfC1_imputed.columns.get_loc(colu2)
+                except KeyError:
+                    col_pos = dfC1_imputed.columns.get_loc(colu4) + 1
+
+                dfC1_imputed.insert(col_pos, colu, 0)
+
+            # Transpose back
+            dfC1_imputedtrans = dfC1_imputed.transpose()
+
+            # Replace back the strings
+            dfC1_imputedtrans = dfC1_imputedtrans.replace(0.0009000009, 'N.A.')
+            dfC1_imputedtrans = dfC1_imputedtrans.replace(0.0008000008, '–')
+
+            # Now check the sums
+            acceptable = True
+            for col in dfC1_imputedtrans.columns:
+                try:
+                    total_value = float(dfC1_imputedtrans.iloc[1][col])
+                    component_values = dfC1_imputedtrans.iloc[2:, col].astype(float)
+                    sum_components = component_values.sum()
+
+                    if total_value != 0:
+                        relative_difference = abs(sum_components - total_value) / abs(total_value)
+                    else:
+                        relative_difference = 0 if sum_components == 0 else float('inf')
+
+                    if relative_difference > 0.05:
+                        acceptable = False
+                        print(
+                            f"Iteration {iteration}: Total vs Sum in column '{col}' differs by more than 5% "
+                            f"({relative_difference * 100:.2f}%). Re-imputing..."
+                        )
+                        break  # No need to check further columns
+
+                except ValueError:
+                    # Non-numeric values encountered, re-impute
+                    acceptable = False
+                    print(f"Iteration {iteration}: Non-numeric values encountered in column '{col}'. Re-imputing...")
+                    break
+
+            if not acceptable and iteration >= max_iterations:
+                print(f"Warning: Unable to achieve acceptable totals after {max_iterations} iterations")
+
+        # Plotting the imputed data
+        save_imputed_data_plot(dfC1_imputedtrans, 'imputed_data_plot.png')
+
+        # Break the combined imputed dataframe back into separate data frames
+        df0_imputedtrans = dfC1_imputedtrans.iloc[:Rows1]
+        df1_imputedtrans = dfC1_imputedtrans.iloc[Rows1:]
 
         # Append DataFrame to existing Excel file
         with pd.ExcelWriter(TempFilename1, mode='a', if_sheet_exists='overlay') as writer:
-            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1, index=False, header=False)
-            df1_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow2 + 1, startcol=Colnum2 - 1, index=False, header=False)
-    # setting up the timing function to be linked to the verbosity user input
-    if verbosity == "y" or verbosity == "Y":
-        # Timing function for testing purposes
+            df0_imputedtrans.to_excel(
+                writer,
+                sheet_name=Sheetname1,
+                startrow=SRow1 + 1,
+                startcol=Colnum1 - 1,
+                index=False,
+                header=False
+            )
+            df1_imputedtrans.to_excel(
+                writer,
+                sheet_name=Sheetname1,
+                startrow=SRow2 + 1,
+                startcol=Colnum2 - 1,
+                index=False,
+                header=False
+            )
+
+    # Timing function
+    if verbosity.lower() == "y":
         LocalEndTime = time.time()
-        # Determine the time and convert to minutes and seconds
-        LocalTimeMin, LocalTimeSec = divmod((LocalEndTime - LocalStartTime) / 60, 1.0)
-        print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) + " Seconds")
+        total_time = LocalEndTime - LocalStartTime
+        minutes = int(total_time // 60)
+        seconds = int(total_time % 60)
+        print(
+            "Section completion time: "
+            + str(minutes)
+            + " Minutes and "
+            + str(seconds)
+            + " Seconds"
+        )
+
 
 
 def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6, Row6, Filename1, Sheetname1):
@@ -449,43 +517,49 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
     SRow1 = Row1 - 2
     SRow2 = Row3 - 2
     SRow3 = Row5 - 2
-    # Defining the start column as a number by converting the Col1 and Col3 variables to numbers note the .upper()
-    # ensures the the value is a capital letter to ensure - 64 gives the correct value if not it will throw an error
-    # as lower case letters require a - 96 to give correct value
-    if len(Col1) == 1:
-        Colnum1 = ord(Col1.upper()) - 64
-    else:
-        Colnum1 = ((ord(Col1[:1].upper()) - 64) * 26) + (ord(Col1[1:].upper()) - 64)
 
-    if len(Col3) == 1:
-        Colnum2 = ord(Col3.upper()) - 64
-    else:
-        Colnum2 = ((ord(Col3[:1].upper()) - 64) * 26) + (ord(Col3[1:].upper()) - 64)
+    # Defining the start column as a number
+    def col_to_num(col):
+        num = 0
+        for c in col.upper():
+            num = num * 26 + (ord(c) - ord('A') + 1)
+        return num
 
-    if len(Col3) == 1:
-        Colnum3 = ord(Col5.upper()) - 64
-    else:
-        Colnum3 = ((ord(Col5[:1].upper()) - 64) * 26) + (ord(Col5[1:].upper()) - 64)
-
-    # IF data changes this section in each for loop must also change for example the current area of interest is
-    # row C13:V13 which is 1 row and cols C:V for totals and C15:V24 which is 10 rows and cols C:V for individual
-    # energy use. To change the cols (which equates to years) change the value of usecols = C:V to the column
-    # needed in Excel. To change the rows the starting point is indicated by skiprows(0, x) x is 2 minus the row
-    # number from excel so cell C13 starts at skiprows(0,11) this is possibly due to the inclusion of a header
-    # tests with header = FALSE might render this part unnecessary. To set the number of rows simply just change
-    # the nrows variable to the number of rows being considered.
+    Colnum1 = col_to_num(Col1)
+    Colnum2 = col_to_num(Col3)
+    Colnum3 = col_to_num(Col5)
 
     TempFilename1 = temp_folder + Filename1
 
-    df0 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow1), nrows=Rows1, usecols=Cols1, sheet_name=Sheetname1)
-    df1 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow2), nrows=Rows2, usecols=Cols2, sheet_name=Sheetname1)
-    df2 = pd.read_excel(TempFilename1, na_values=['x', "X"], skiprows=range(0, SRow3), nrows=Rows3, usecols=Cols3, sheet_name=Sheetname1)
+    df0 = pd.read_excel(
+        TempFilename1,
+        na_values=['x', 'X'],
+        skiprows=range(0, SRow1),
+        nrows=Rows1,
+        usecols=Cols1,
+        sheet_name=Sheetname1
+    )
+    df1 = pd.read_excel(
+        TempFilename1,
+        na_values=['x', 'X'],
+        skiprows=range(0, SRow2),
+        nrows=Rows2,
+        usecols=Cols2,
+        sheet_name=Sheetname1
+    )
+    df2 = pd.read_excel(
+        TempFilename1,
+        na_values=['x', 'X'],
+        skiprows=range(0, SRow3),
+        nrows=Rows3,
+        usecols=Cols3,
+        sheet_name=Sheetname1
+    )
 
     # Timing Function for testing purposes
-
     LocalStartTime = time.time()
 
-    # if function to save time by skipping data frames without a null value
+    # If function to save time by skipping data frames without a null value
     if df0.isnull().values.any() or df1.isnull().values.any() or df2.isnull().values.any():
         # Count the missing values
         msum = df0.isnull().sum().sum() + df1.isnull().sum().sum() + df2.isnull().sum().sum()
@@ -494,79 +568,170 @@ def threedfImp(Col1, Row1, Col2, Row2, Col3, Row3, Col4, Row4, Col5, Row5, Col6,
         misslist.append(msum)
 
         # Tell the user that there are missing values to be imputed in this data frame
-        print("There are " + str(msum) + " missing values to be imputed in cells " + Col1 + str(Row1) + ":" + Col2 + str(Row2) + " and " + Col3 + str(Row3) + ":" + Col4 + str(
-            Row4) + " and " + Col5 + str(Row5) + ":" + Col6 + str(Row6))
+        print(
+            "There are "
+            + str(msum)
+            + " missing values to be imputed in cells "
+            + Col1
+            + str(Row1)
+            + ":"
+            + Col2
+            + str(Row2)
+            + ", "
+            + Col3
+            + str(Row3)
+            + ":"
+            + Col4
+            + str(Row4)
+            + ", and "
+            + Col5
+            + str(Row5)
+            + ":"
+            + Col6
+            + str(Row6)
+        )
 
-        # This section is to replace sections of long text which should be left as is because I think X is missing data,
-        # I would think n.a. means is the electricity type is not used at all, and - is the same just formatted
-        # differently I don't know why
-        df0 = df0.replace(['n.a.'], '0.0009000009')
-        df1 = df1.replace(['n.a.'], '0.0009000009')
-        df2 = df2.replace(['n.a.'], '0.0009000009')
+        # Replace 'n.a.', 'N.A.', and '–' with temporary numeric values for imputation
+        df_list = [df0, df1, df2]
+        for df in df_list:
+            df.replace(['n.a.', 'N.A.', '–'], [0.0009000009, 0.0009000009, 0.0008000008], inplace=True)
 
-        df0 = df0.replace(['–'], '0.0008000008')
-        df1 = df1.replace(['–'], '0.0008000008')
-        df2 = df2.replace(['–'], '0.0008000008')
+        # Combine data frames
+        dfcombine1 = pd.concat(df_list, ignore_index=True)
 
-        # Combine data frames generally the 1 row data frame is the total for the larger data frame so should be
-        # imputed together to get better results when using iterative imputers
-        dfcombine1 = pd.concat([df0, df1, df2], ignore_index=True)
-
-        # Transpose x and y-axis because of the ways imputers read data
+        # Transpose x and y-axis
         dfTransC1 = dfcombine1.transpose()
 
-        # Sets up names for each column so when a column gets dropped we know which one is dropped and where to place it
-        # the names follow the structure of col1, col2, col3 ... etc
+        # Set up column names
         column_names = ["col" + str(i) for i in range(dfTransC1.shape[1])]
         dfTransC1.columns = column_names
 
-        # Performs the imputation with the follow code
-        try:
-            imputedC1 = imputer.fit_transform(dfTransC1)
-        except (Exception,):
-            imputedC1 = baImputer.fit_transform(dfTransC1)
+        # Initialize iteration variables
+        max_iterations = 5
+        iteration = 0
+        acceptable = False
 
-        # Turn the imputed data back into a data frame
-        dfC1_imputed = pd.DataFrame(imputedC1, columns=dfTransC1.dropna(axis=1, how='all').columns)
+        while not acceptable and iteration < max_iterations:
+            iteration += 1
 
-        # find missing columns by the original set of column names and names after the drop occurs
-        missing_cols = list(set(dfTransC1.columns) - set(dfC1_imputed.columns))
-        # for each missing column reinsert a row of 0s by stripping the col off of col1, col2, col3 etc. of the missing
-        # columns adding one to the number (since it inserts before the column position) to get the value of the next
-        # column and inserts a new column of appropriate name in an appropriate place
-        for colu in missing_cols:
-            colu1 = colu[3:]
-            colu1 = int(colu1) + 1
-            colu2 = "col" + str(colu1)
-            col_pos = dfC1_imputed.columns.get_loc(colu2)
-            dfC1_imputed.insert(col_pos, colu, 0)
+            # Perform imputation
+            try:
+                imputedC1 = imputer.fit_transform(dfTransC1)
+            except Exception:
+                imputedC1 = baImputer.fit_transform(dfTransC1)
 
-        # Transpose the imputed data BACK to the original orientation
-        dfC1_imputedtrans = dfC1_imputed.transpose()
-        # Replace the specified changes back to strings (needed to be numbers so the imputer would run)
-        dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0009000009], 'N.A.')
-        dfC1_imputedtrans = dfC1_imputedtrans.replace([0.0008000008], '–')
+            # Turn the imputed data back into a data frame
+            dfC1_imputed = pd.DataFrame(
+                imputedC1,
+                columns=dfTransC1.dropna(axis=1, how='all').columns
+            )
 
-        save_imputed_data_plot(dfC1_imputedtrans, Filename1)
+            # Handle missing columns
+            missing_cols = list(set(dfTransC1.columns) - set(dfC1_imputed.columns))
+            missing_cols.sort(reverse=True)
+            for colu in missing_cols:
+                colu0 = int(colu[3:])
 
-        # Breaks the combined imputed dataframe into two seperate data frames again
-        df0_imputedtrans = dfC1_imputedtrans[:Rows1]
-        df1_imputedtrans = dfC1_imputedtrans[Rows1:Rows1 + Rows2]
-        df2_imputedtrans = dfC1_imputedtrans[Rows1 + Rows2:]
+                # Column one ahead
+                colu1 = colu0 + 1
+                colu2 = "col" + str(colu1)
+
+                # Column one behind
+                colu3 = colu0 - 1
+                colu4 = "col" + str(colu3)
+
+                try:
+                    col_pos = dfC1_imputed.columns.get_loc(colu2)
+                except KeyError:
+                    col_pos = dfC1_imputed.columns.get_loc(colu4) + 1
+
+                dfC1_imputed.insert(col_pos, colu, 0)
+
+            # Transpose back
+            dfC1_imputedtrans = dfC1_imputed.transpose()
+
+            # Replace back the strings
+            dfC1_imputedtrans.replace(0.0009000009, 'N.A.', inplace=True)
+            dfC1_imputedtrans.replace(0.0008000008, '–', inplace=True)
+
+            # Now check the sums
+            acceptable = True
+            for col in dfC1_imputedtrans.columns:
+                try:
+                    total_value = float(dfC1_imputedtrans.iloc[1][col])
+                    component_values = dfC1_imputedtrans.iloc[2:, col].astype(float)
+                    sum_components = component_values.sum()
+
+                    if total_value != 0:
+                        relative_difference = abs(sum_components - total_value) / abs(total_value)
+                    else:
+                        relative_difference = 0 if sum_components == 0 else float('inf')
+
+                    if relative_difference > 0.05:
+                        acceptable = False
+                        print(
+                            f"Iteration {iteration}: Total vs Sum in column '{col}' differs by more than 5% "
+                            f"({relative_difference * 100:.2f}%). Re-imputing..."
+                        )
+                        break
+
+                except ValueError:
+                    # Non-numeric values encountered
+                    acceptable = False
+                    print(f"Iteration {iteration}: Non-numeric values encountered in column '{col}'. Re-imputing...")
+                    break
+
+            if not acceptable and iteration >= max_iterations:
+                print(f"Warning: Unable to achieve acceptable totals after {max_iterations} iterations")
+
+        # Plotting the imputed data
+        save_imputed_data_plot(dfC1_imputedtrans, 'imputed_data_plot.png')
+
+        # Break the combined imputed dataframe back into separate data frames
+        df0_imputedtrans = dfC1_imputedtrans.iloc[:Rows1]
+        df1_imputedtrans = dfC1_imputedtrans.iloc[Rows1:Rows1 + Rows2]
+        df2_imputedtrans = dfC1_imputedtrans.iloc[Rows1 + Rows2:]
 
         # Append DataFrame to existing Excel file
         with pd.ExcelWriter(TempFilename1, mode='a', if_sheet_exists='overlay') as writer:
-            df0_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow1 + 1, startcol=Colnum1 - 1, index=False, header=False)
-            df1_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow2 + 1, startcol=Colnum2 - 1, index=False, header=False)
-            df2_imputedtrans.to_excel(writer, sheet_name=Sheetname1, startrow=SRow3 + 1, startcol=Colnum3 - 1, index=False, header=False)
+            df0_imputedtrans.to_excel(
+                writer,
+                sheet_name=Sheetname1,
+                startrow=SRow1 + 1,
+                startcol=Colnum1 - 1,
+                index=False,
+                header=False
+            )
+            df1_imputedtrans.to_excel(
+                writer,
+                sheet_name=Sheetname1,
+                startrow=SRow2 + 1,
+                startcol=Colnum2 - 1,
+                index=False,
+                header=False
+            )
+            df2_imputedtrans.to_excel(
+                writer,
+                sheet_name=Sheetname1,
+                startrow=SRow3 + 1,
+                startcol=Colnum3 - 1,
+                index=False,
+                header=False
+            )
 
-        # setting up the timing function to be linked to the verbosity user input
-        if verbosity == "y" or verbosity == "Y":
-            # Timing function for testing purposes
-            LocalEndTime = time.time()
-            # Determine the time and convert to minutes and seconds
-            LocalTimeMin, LocalTimeSec = divmod((LocalEndTime - LocalStartTime) / 60, 1.0)
-            print("Section completion time: " + str(round(LocalTimeMin)) + " Minutes and " + str(round(LocalTimeSec * 60)) + " Seconds")
+    # Timing function
+    if verbosity.lower() == "y":
+        LocalEndTime = time.time()
+        total_time = LocalEndTime - LocalStartTime
+        minutes = int(total_time // 60)
+        seconds = int(total_time % 60)
+        print(
+            "Section completion time: "
+            + str(minutes)
+            + " Minutes and "
+            + str(seconds)
+            + " Seconds"
+        )
 
 
 # Validation

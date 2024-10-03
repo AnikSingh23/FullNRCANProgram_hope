@@ -208,6 +208,11 @@ def process_sheet(old_df, new_df, oldFileName, sheet_name):
         new_row_names = new_df.iloc[:, 1].fillna("").tolist()
 
         for i, new_row_name in enumerate(new_row_names):
+            # Skip rows that contain '!' in their name
+            if "!" in new_row_name:
+                print(f"Skipping row with '!': {new_row_name}")
+                continue
+
             if new_row_name not in old_row_names:
                 print(f"Inserting missing row: {new_row_name}")
 
@@ -220,7 +225,10 @@ def process_sheet(old_df, new_df, oldFileName, sheet_name):
                     if new_row_name > old_row_name:
                         insert_position = j + 1
 
-                old_df = pd.concat([old_df.iloc[:insert_position], pd.DataFrame([new_row_data], columns=old_df.columns), old_df.iloc[insert_position:]], ignore_index=True)
+                old_df = pd.concat(
+                    [old_df.iloc[:insert_position], pd.DataFrame([new_row_data], columns=old_df.columns), old_df.iloc[insert_position:]],
+                    ignore_index=True
+                )
 
                 old_row_names.insert(insert_position, new_row_name)
 
